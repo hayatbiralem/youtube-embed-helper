@@ -66,7 +66,13 @@
 
 /* Playing
    ========================================================================== */
+.o-youtube-embed:not(.is-playing) .o-youtube-embed__video:before {
+  position: relative;
+  z-index: 5;
+}
+
 .o-youtube-embed:not(.is-playing) .o-youtube-embed__play {
+  z-index: 6;
   cursor: pointer;
 }
 

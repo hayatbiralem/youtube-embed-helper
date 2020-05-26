@@ -65,6 +65,13 @@ export default function process() {
         };
 
         let onStateChange = function (response) {
+
+          // Check if completed
+          if (response.data === 0) {
+            onPaused(true, true);
+            document.exitFullscreen && document.exitFullscreen();
+          }
+
           // Check if paused
           if (response.data === 2) {
 
@@ -76,17 +83,15 @@ export default function process() {
             }, 2000);
           }
 
-          // Check if completed
-          if (response.data === 0) {
-            onPaused(true, true);
-            document.exitFullscreen && document.exitFullscreen();
+          // Check if played
+          if (response.data === 1) {
+            onPlayed();
           }
         };
 
         play.addEventListener('click', function () {
           if (el.player) {
             el.player.playVideo();
-            onPlayed();
           } else {
             addClass(el, 'is-loading');
             loadAPI(function () {
