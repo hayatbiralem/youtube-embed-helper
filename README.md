@@ -48,6 +48,17 @@ and for styles in scss:
 ```scss
 @import "~youtube-embed-helper/src/scss/youtube-embed-helper";
 ```
+### Autoprefixer
+
+You can change browser list in the package.json. Default settings are here:
+
+```json
+{
+    "browserslist": [
+      ">0.01%"
+    ]
+}
+```
 
 ### Refresh
 

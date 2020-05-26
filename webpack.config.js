@@ -2,6 +2,7 @@ const path = require('path');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const devMode = process.env.NODE_ENV !== 'production';
 const mode = devMode ? 'development' : 'production';
@@ -33,13 +34,19 @@ module.exports = {
           'extract-loader',
           'css-loader',
           {
+            loader: "postcss-loader",
+            options: {
+              plugins: () => [autoprefixer()]
+            }
+          },
+          {
             loader: 'sass-loader',
             options: {
               sassOptions: {
                 outputStyle: 'expanded'
               }
             }
-          }
+          },
         ],
       },
     ],
