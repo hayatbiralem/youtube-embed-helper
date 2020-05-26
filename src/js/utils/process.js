@@ -4,15 +4,12 @@ import addVideo from './addVideo';
 import getYoutubeId from './getYoutubeId';
 import addClass from './addClass';
 import removeClass from './removeClass';
-import PubSub from 'pubsub-js';
 
 const selector = '.o-youtube-embed';
 const classes = {
   l: 'is-loading',
   p: 'is-playing'
 };
-
-const pubSubEventName = 'youtube-embed-played';
 
 export default function process() {
   each(selector, function (el) {
@@ -32,32 +29,32 @@ export default function process() {
           video.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + youtubeId + '/' + (el.getAttribute('data-thumbnail') || 'hqdefault') + '.jpg)';
         }
 
-        let onPaused = function (pause, goToStart) {
-          if (pause && el.player) {
-            el.player.pauseVideo();
+        let onPaused = function (pause, goToStart, element) {
+          element = element || el;
+
+          if (pause && element.player) {
+            element.player.pauseVideo();
           }
 
-          removeClass(el, classes.p);
+          removeClass(element, classes.p);
 
-          if (goToStart && el.player) {
-            el.player.seekTo(0);
+          if (goToStart && element.player) {
+            element.player.seekTo(0);
           }
+        };
+
+        let stopOtherPlayers = function(){
+          each(selector + '.is-playing', function(element){
+            if(element !== el) {
+              onPaused(true, false, element);
+            }
+          });
         };
 
         let onPlayed = function () {
           addClass(el, classes.p);
-          PubSub.publish(pubSubEventName, {
-            el: el
-          });
+          stopOtherPlayers();
         };
-
-        let onOtherPlayerPlayed = function (message, data) {
-          if (data.el !== el) {
-            onPaused(true);
-          }
-        };
-
-        PubSub.subscribe(pubSubEventName, onOtherPlayerPlayed);
 
         let onReady = function (event, player) {
           el.player = player;

@@ -161,6 +161,7 @@ npm run watch
 - [x] Add to the npm directory.
 - [x] Add optional caption
 - [ ] Add demo for original YouTube play icon
+- [ ] Add custom events (consider this one)
 
 ## Contributors
 

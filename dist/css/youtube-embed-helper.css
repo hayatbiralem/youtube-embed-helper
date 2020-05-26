@@ -77,7 +77,7 @@
 }
 
 .o-youtube-embed.is-playing .o-youtube-embed__play,
-.o-youtube-embed.is-playing .o-youtube-embed__caption {
+.o-youtube-embed.is-playing .o-youtube-embed__caption--overlay {
   display: none;
 }
 
