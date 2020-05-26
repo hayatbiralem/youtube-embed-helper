@@ -6,6 +6,11 @@ It tries to provide a better user experience with [YouTube Player API for iframe
 
 Tested on IE11 but it should work on IE10 too.
 
+## File Sizes
+
+- JS: `3.12kb` / `1.45kb` GZip
+- CSS: `1.29kb` / `0.41kb` GZip
+
 ## Installation
 
 With npm
