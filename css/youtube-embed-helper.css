@@ -1,0 +1,71 @@
+/* ==========================================================================
+   #YOUTUBE_EMBED
+   ========================================================================== */
+/**
+ * Base styles for object.
+ */
+.o-youtube-embed {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.o-youtube-embed * {
+  box-sizing: inherit;
+}
+
+.o-youtube-embed__video {
+  position: relative;
+  z-index: 1;
+  display: block;
+  background-size: cover;
+  background-position: center;
+  background-color: #000;
+}
+
+.o-youtube-embed__video:before {
+  content: "";
+  display: block;
+  padding-bottom: 56.25%;
+}
+
+.o-youtube-embed__iframe {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.o-youtube-embed__caption--overlay {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+}
+
+.o-youtube-embed__play {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  display: inline-block;
+  transform: translate(-50%, -50%);
+}
+
+/* Playing
+   ========================================================================== */
+.o-youtube-embed:not(.is-playing) .o-youtube-embed__play {
+  cursor: pointer;
+}
+
+.o-youtube-embed.is-playing .o-youtube-embed__play,
+.o-youtube-embed.is-playing .o-youtube-embed__caption {
+  display: none;
+}
+
+.o-youtube-embed.is-playing .o-youtube-embed__iframe {
+  opacity: 1;
+}
