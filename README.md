@@ -197,6 +197,7 @@ npm run watch
 - [x] Add optional caption
 - [ ] Add demo for original YouTube play icon
 - [ ] Add custom events (consider this one)
+- [ ] Catch "Your browser does not currently recognize any of the video formats available." error on Firefox and implement it in to the code
 
 ## Contributors
 
