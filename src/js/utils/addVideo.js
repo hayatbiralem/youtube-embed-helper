@@ -20,7 +20,6 @@ export default function addVideo(el, videoId, onReady, onStateChange) {
 
   // 4. The API will call this function when the video player is ready.
   function onPlayerReady(event) {
-    event.target.playVideo();
     onReady && onReady(event, player);
   }
 

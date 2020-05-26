@@ -4,6 +4,7 @@ import addVideo from './addVideo';
 import getYoutubeId from './getYoutubeId';
 import addClass from './addClass';
 import removeClass from './removeClass';
+import getData from './getData';
 
 const selector = '.o-youtube-embed';
 const classes = {
@@ -17,7 +18,7 @@ export default function process() {
 
       el.isYouTubeEmbedHelperProcessed = true;
 
-      let youtubeId = getYoutubeId(el.getAttribute('data-url'));
+      let youtubeId = getYoutubeId(getData(el, 'url'));
 
       if (youtubeId) {
 
@@ -25,8 +26,10 @@ export default function process() {
         let play = el.querySelector(selector + '__play');
         let iframe = el.querySelector(selector + '__iframe');
 
+        let playOnReady = true;
+
         if (window.getComputedStyle(video, null).getPropertyValue('background-image') === 'none') {
-          video.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + youtubeId + '/' + (el.getAttribute('data-thumbnail') || 'hqdefault') + '.jpg)';
+          video.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + youtubeId + '/' + ( getData(el, 'thumbnail', 'hqdefault')) + '.jpg)';
         }
 
         let onPaused = function (pause, goToStart, element) {
@@ -58,10 +61,18 @@ export default function process() {
 
         let onReady = function (event, player) {
           el.player = player;
-          onPlayed();
+
+          if(playOnReady) {
+            el.player.playVideo();
+            onPlayed();
+          }
         };
 
         let onStateChange = function (response) {
+
+          console.log('onStateChange');
+          console.log(el);
+          console.log(response);
 
           // Check if completed
           if (response.data === 0) {
@@ -86,25 +97,38 @@ export default function process() {
           }
         };
 
+        let load = function(){
+          loadAPI(function () {
+            addVideo(
+              iframe,
+              youtubeId,
+              onReady,
+              onStateChange
+            );
+            setTimeout(function () {
+              removeClass(el, classes.l);
+              if(playOnReady) {
+                addClass(el, classes.p);
+              }
+            }, 500);
+          });
+        };
+
         play.addEventListener('click', function () {
           if (el.player) {
             el.player.playVideo();
           } else {
             addClass(el, 'is-loading');
-            loadAPI(function () {
-              addVideo(
-                iframe,
-                youtubeId,
-                onReady,
-                onStateChange
-              );
-              setTimeout(function () {
-                removeClass(el, classes.l);
-                addClass(el, classes.p);
-              }, 500);
-            });
+            load();
           }
         });
+
+        // Do not wait click, add the iframe immediately
+        // It is not optimal but when you need to play at the first click on mobile, you could consider it
+        if(getData(el, 'prefetch')) {
+          playOnReady = false;
+          load();
+        }
       }
     }
   });
