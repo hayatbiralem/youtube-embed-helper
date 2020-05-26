@@ -110,7 +110,9 @@ In this way Javascript don't touch the `background-image`.
     <div class="o-youtube-embed__iframe"></div>
   </div>
   <div class="o-youtube-embed__caption">
-    <a class="o-youtube-embed__title" href="https://www.youtube.com/channel/UCWB20EVmTrCLegr64R9jEJA" target="_blank">Spinach Time Lapse (40 Days)</a>
+    <a class="o-youtube-embed__title" href="https://www.youtube.com/channel/UCWB20EVmTrCLegr64R9jEJA" target="_blank">
+      Spinach Time Lapse (40 Days)
+    </a>
   </div>
 </div>
 ```
@@ -124,12 +126,30 @@ In this way Javascript don't touch the `background-image`.
     <div class="o-youtube-embed__iframe"></div>
   </div>
   <div class="o-youtube-embed__caption o-youtube-embed__caption--overlay">
-    <a class="o-youtube-embed__title" href="https://www.youtube.com/channel/UCWB20EVmTrCLegr64R9jEJA" target="_blank">Radish Time Lapse (68 days)</a>
+    <a class="o-youtube-embed__title" href="https://www.youtube.com/channel/UCWB20EVmTrCLegr64R9jEJA" target="_blank">
+      Radish Time Lapse (68 days)
+    </a>
   </div>
 </div>
 ```
 
-See the example on [CodePen](https://soon.io)
+### Muted so maybe it could play on mobile at first click
+
+This example also shows us that to override player params via `.o-youtube-embed__iframe` object's data attributes.
+
+```html
+<div class="o-youtube-embed" data-url="https://www.youtube.com/watch?v=smJmfgaQAR4">
+  <div class="o-youtube-embed__video">
+    <div class="c-play o-youtube-embed__play"></div>
+    <div class="o-youtube-embed__iframe" data-mute="1"></div>
+  </div>
+  <div class="o-youtube-embed__caption o-youtube-embed__caption--overlay">
+    <a class="o-youtube-embed__title" href="https://www.youtube.com/channel/UCWB20EVmTrCLegr64R9jEJA" target="_blank">
+      Blooming Narcissus Time Lapse
+    </a>
+  </div>
+</div>
+```
 
 ### Pauses Automatically
 
