@@ -29,7 +29,7 @@ You can import this plugin into your project as follows:
 
 ```html
 <link href="node_modules/dist/css/youtube-embed-helper.css" rel="stylesheet">
-<script src="node_modules/dist/js/youtube-embed-helper.js"></script>
+<script src="node_modules/dist/js/youtube-embed-helper.js" async defer></script>
 ```
 
 .. and you're ready to go.
