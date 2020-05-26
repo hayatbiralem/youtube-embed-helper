@@ -77,7 +77,7 @@ Also `.c-play` component class used for demo. You need to use your own icon clas
 ```html
 <div class="o-youtube-embed" data-url="https://www.youtube.com/watch?v=w77zPAtVTuI" data-thumbnail="maxresdefault">
   <div class="o-youtube-embed__video">
-    <div class="c-play o-youtube-embed__play o-youtube-embed__play--has-cosmetic"></div>
+    <div class="c-play o-youtube-embed__play"></div>
     <div class="o-youtube-embed__iframe"></div>
   </div>
 </div>
