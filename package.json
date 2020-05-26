@@ -1,6 +1,6 @@
 {
   "name": "youtube-embed-helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "It tries to provide a better user experience.",
   "main": "src/js/index.js",
   "scripts": {
