@@ -1,17 +1,10 @@
-import getData from './getData';
+import getPlayerVars from './getPlayerVars';
 
-export default function addVideo(el, videoId, onReady, onStateChange) {
+export default function addVideo(el, videoId, playerVars, onReady, onStateChange) {
   let player = new YT.Player(el, {
     videoId: videoId,
     host: 'https://www.youtube.com',
-    playerVars: {
-      autoplay: getData(el, 'autoplay', 1),
-      modestbranding: getData(el, 'modestbranding', 1),
-      rel: getData(el, 'rel', 0),
-      showinfo: getData(el, 'showinfo', 0),
-      controls: getData(el, 'controls', 1),
-      mute: getData(el, 'mute', 0)
-    },
+    playerVars: playerVars || getPlayerVars(el),
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange

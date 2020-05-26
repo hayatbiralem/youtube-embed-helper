@@ -82,6 +82,16 @@ processYouTubeEmbedHelper();
 
 Only new ones will be processed.
 
+### Prefetch
+
+If you want to prefetch an `.o-youtube-embed` element's iframe resource you can dispatch following event after initialization:
+
+```js
+el.dispatchEvent(el.prefetchEvent);
+```
+
+This will set `autoplay` to `0` and fetch youtube iframe in background. This way your visitors could play videos on mobile with just one click, not two.
+
 ## Examples
 
 We could create `.o-youtube-embed__video`, `.o-youtube-embed__play` and `.o-youtube-embed__iframe` elements on the fly but why? If we create those directly in the html that would be more fast and configurable, right?

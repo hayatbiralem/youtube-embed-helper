@@ -5,6 +5,8 @@ import getYoutubeId from './getYoutubeId';
 import addClass from './addClass';
 import removeClass from './removeClass';
 import getData from './getData';
+import getPlayerVars from './getPlayerVars';
+import getCustomEvent from './getCustomEvent';
 
 const selector = '.o-youtube-embed';
 const classes = {
@@ -12,11 +14,22 @@ const classes = {
   p: 'is-playing'
 };
 
+const eventPrefix = 'youtube-embed-';
+
+const getEventName = function (key) {
+  return eventPrefix + key;
+};
+
+let prefetchEventName = getEventName('prefetch');
+let prefetchEvent = getCustomEvent(prefetchEventName);
+
 export default function process() {
   each(selector, function (el) {
     if (!el.isYouTubeEmbedHelperProcessed) {
 
       el.isYouTubeEmbedHelperProcessed = true;
+
+      el.prefetchEvent = prefetchEvent;
 
       let youtubeId = getYoutubeId(getData(el, 'url'));
 
@@ -46,15 +59,16 @@ export default function process() {
           }
         };
 
-        let stopOtherPlayers = function(){
-          each(selector + '.is-playing', function(element){
-            if(element !== el) {
+        let stopOtherPlayers = function () {
+          each(selector + '.is-playing', function (element) {
+            if (element !== el) {
               onPaused(true, false, element);
             }
           });
         };
 
         let onPlayed = function () {
+          removeClass(el, classes.l);
           addClass(el, classes.p);
           stopOtherPlayers();
         };
@@ -62,7 +76,7 @@ export default function process() {
         let onReady = function (event, player) {
           el.player = player;
 
-          if(playOnReady) {
+          if (playOnReady) {
             el.player.playVideo();
             onPlayed();
           }
@@ -97,37 +111,39 @@ export default function process() {
           }
         };
 
-        let load = function(){
+        let load = function () {
           loadAPI(function () {
             addVideo(
               iframe,
               youtubeId,
+              getPlayerVars(el),
               onReady,
               onStateChange
             );
-            setTimeout(function () {
-              removeClass(el, classes.l);
-              if(playOnReady) {
-                addClass(el, classes.p);
-              }
-            }, 500);
           });
         };
 
         play.addEventListener('click', function () {
+          addClass(el, classes.l);
           if (el.player) {
             el.player.playVideo();
           } else {
-            addClass(el, 'is-loading');
+            load();
+          }
+        });
+
+        el.addEventListener(prefetchEventName, function () {
+          if(!el.player) {
+            playOnReady = false;
+            el.setAttribute('data-autoplay', '0');
             load();
           }
         });
 
         // Do not wait click, add the iframe immediately
         // It is not optimal but when you need to play at the first click on mobile, you could consider it
-        if(getData(el, 'prefetch')) {
-          playOnReady = false;
-          load();
+        if (getData(el, 'prefetch')) {
+          el.dispatchEvent(prefetchEvent);
         }
       }
     }
