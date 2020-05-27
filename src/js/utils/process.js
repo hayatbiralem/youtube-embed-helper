@@ -84,10 +84,6 @@ export default function process() {
 
         let onStateChange = function (response) {
 
-          console.log('onStateChange');
-          console.log(el);
-          console.log(response);
-
           // Check if completed
           if (response.data === 0) {
             onPaused(true, true);
