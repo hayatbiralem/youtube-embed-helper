@@ -41,6 +41,8 @@ export default function process() {
 
         let playOnReady = true;
 
+        let showCoverOnPause = parseInt(getData(el, 'show-cover-on-pause'));
+
         if (window.getComputedStyle(video, null).getPropertyValue('background-image') === 'none') {
           video.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + youtubeId + '/' + ( getData(el, 'thumbnail', 'hqdefault')) + '.jpg)';
         }
@@ -52,7 +54,9 @@ export default function process() {
             element.player.pauseVideo();
           }
 
-          removeClass(element, classes.p);
+          if(showCoverOnPause) {
+            removeClass(element, classes.p);
+          }
 
           if (goToStart && element.player) {
             element.player.seekTo(0);
