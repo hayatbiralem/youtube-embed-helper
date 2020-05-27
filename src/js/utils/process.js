@@ -21,9 +21,6 @@ const getEventName = function (key) {
   return eventPrefix + key;
 };
 
-let prefetchEventName = getEventName('prefetch');
-let prefetchEvent = getCustomEvent(prefetchEventName);
-
 let eventNames = ['ready', 'played', 'paused', 'finished', 'stateChange'];
 let attachEvents = function (el) {
   eventNames.forEach(function (eventName) {
@@ -50,7 +47,6 @@ export default function process() {
 
       if (youtubeId) {
 
-        el.prefetchEvent = prefetchEvent;
         attachEvents(el);
 
         let video = el.querySelector(selector + '__video');
