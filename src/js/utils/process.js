@@ -138,7 +138,7 @@ export default function process() {
 
         // Do not wait click, add the iframe immediately
         // It is not optimal but when you need to play at the first click on mobile, you could consider it
-        if (getData(el, 'prefetch')) {
+        if (parseInt(getData(el, 'prefetch'))) {
           el.dispatchEvent(prefetchEvent);
         }
       }
