@@ -7,6 +7,7 @@ import removeClass from './removeClass';
 import getData from './getData';
 import getPlayerVars from './getPlayerVars';
 import getCustomEvent from './getCustomEvent';
+import exitFullScreen from './exitFullScreen';
 
 const selector = '.o-youtube-embed';
 const classes = {
@@ -23,17 +24,34 @@ const getEventName = function (key) {
 let prefetchEventName = getEventName('prefetch');
 let prefetchEvent = getCustomEvent(prefetchEventName);
 
+let eventNames = ['ready', 'played', 'paused', 'finished', 'stateChange'];
+let attachEvents = function (el) {
+  eventNames.forEach(function (eventName) {
+    el['event_' + eventName] = getCustomEvent(eventName, {
+      detail: {
+        el: el
+      }
+    });
+  });
+};
+
+let fireEvent = function (el, eventName) {
+  el.dispatchEvent(el['event_' + eventName]);
+};
+
+
 export default function process() {
   each(selector, function (el) {
     if (!el.isYouTubeEmbedHelperProcessed) {
 
       el.isYouTubeEmbedHelperProcessed = true;
 
-      el.prefetchEvent = prefetchEvent;
-
       let youtubeId = getYoutubeId(getData(el, 'url'));
 
       if (youtubeId) {
+
+        el.prefetchEvent = prefetchEvent;
+        attachEvents(el);
 
         let video = el.querySelector(selector + '__video');
         let play = el.querySelector(selector + '__play');
@@ -42,6 +60,8 @@ export default function process() {
         let playOnReady = true;
 
         let showCoverOnPause = parseInt(getData(el, 'show-cover-on-pause'));
+        let showCoverOnFinish = parseInt(getData(el, 'show-cover-on-pause', 1));
+        let showCoverDelay = parseInt(getData(el, 'show-cover-delay', 2000));
 
         if (window.getComputedStyle(video, null).getPropertyValue('background-image') === 'none') {
           video.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + youtubeId + '/' + ( getData(el, 'thumbnail', 'hqdefault')) + '.jpg)';
@@ -54,7 +74,7 @@ export default function process() {
             element.player.pauseVideo();
           }
 
-          if(showCoverOnPause) {
+          if (showCoverOnPause) {
             removeClass(element, classes.p);
           }
 
@@ -80,6 +100,8 @@ export default function process() {
         let onReady = function (event, player) {
           el.player = player;
 
+          fireEvent(el, 'ready');
+
           if (playOnReady) {
             el.player.playVideo();
             onPlayed();
@@ -88,10 +110,21 @@ export default function process() {
 
         let onStateChange = function (response) {
 
+          el.state = response.data;
+
+          fireEvent(el, 'stateChange');
+
           // Check if completed
           if (response.data === 0) {
             onPaused(true, true);
-            document.exitFullscreen && document.exitFullscreen();
+
+            exitFullScreen();
+
+            if (showCoverOnFinish) {
+              removeClass(el, classes.p);
+            }
+
+            fireEvent(el, 'finished');
           }
 
           // Check if paused
@@ -102,12 +135,15 @@ export default function process() {
               if (el.player.getPlayerState() === 2) {
                 onPaused();
               }
-            }, 2000);
+            }, showCoverDelay);
+
+            fireEvent(el, 'paused');
           }
 
           // Check if played
           if (response.data === 1) {
             onPlayed();
+            fireEvent(el, 'played');
           }
         };
 
@@ -132,18 +168,18 @@ export default function process() {
           }
         });
 
-        el.addEventListener(prefetchEventName, function () {
-          if(!el.player) {
+        el.prefetchIframe = function () {
+          if (!el.player) {
             playOnReady = false;
             el.setAttribute('data-autoplay', '0');
             load();
           }
-        });
+        };
 
         // Do not wait click, add the iframe immediately
         // It is not optimal but when you need to play at the first click on mobile, you could consider it
         if (parseInt(getData(el, 'prefetch'))) {
-          el.dispatchEvent(prefetchEvent);
+          el.prefetchIframe();
         }
       }
     }

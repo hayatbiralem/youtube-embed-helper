@@ -198,6 +198,7 @@ npm run watch
 - [ ] Add demo for original YouTube play icon
 - [ ] Add custom events (consider this one)
 - [ ] Catch "Your browser does not currently recognize any of the video formats available." error on Firefox and implement it in to the code
+- [ ] Add optional ability to prefetch iframes when element is in viewport
 
 ## Contributors
 
